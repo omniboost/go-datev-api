@@ -1,4 +1,4 @@
-package datevapi_test
+package datev_api_test
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/omniboost/go-datevapi"
+	"github.com/omniboost/go-datev-api"
 )
 
 func TestAccountingDocumentsPut(t *testing.T) {
@@ -19,11 +19,11 @@ func TestAccountingDocumentsPut(t *testing.T) {
 	defer f.Close()
 	req := client.NewAccountingDocumentsPutRequest()
 	req.PathParams().GUID = "9482975b-2172-4b43-b7cc-b07b007e2975"
-	req.FormParams().File = datevapi.FormFile{
+	req.FormParams().File = datev-api.FormFile{
 		Filename: "test.pdf",
 		Content:  f,
 	}
-	req.FormParams().Metadata = datevapi.FileMetaData{
+	req.FormParams().Metadata = datev-api.FileMetaData{
 		Category: "outgoing_invoices",
 		Folder:   "mews",
 		Register: "2023",

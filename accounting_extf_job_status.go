@@ -1,10 +1,10 @@
-package datevapi
+package datev_api
 
 import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-datevapi/utils"
+	"github.com/omniboost/go-datev-api/utils"
 )
 
 func (c *Client) NewAccountingExtfJobStatusRequest() AccountingExtfJobStatusRequest {

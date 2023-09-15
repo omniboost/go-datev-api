@@ -1,4 +1,4 @@
-package datevapi
+package datev_api
 
 import (
 	"golang.org/x/oauth2"

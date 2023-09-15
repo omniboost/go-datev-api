@@ -1,4 +1,4 @@
-package datevapi
+package datev_api
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/omniboost/go-datevapi/utils"
+	"github.com/omniboost/go-datev-api/utils"
 )
 
 func (c *Client) NewAccountingExtfFilesUploadRequest() AccountingExtfFilesUploadRequest {

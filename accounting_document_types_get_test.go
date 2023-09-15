@@ -1,4 +1,4 @@
-package datevapi_test
+package datev_api_test
 
 import (
 	"encoding/json"

@@ -1,11 +1,11 @@
-package datevapi_test
+package datev_api_test
 
 import (
 	"os"
 	"testing"
 	"time"
 
-	datev "github.com/omniboost/go-datevapi"
+	datev "github.com/omniboost/go-datev-api"
 	"golang.org/x/oauth2"
 )
 

@@ -1,4 +1,4 @@
-package datevapi
+package datev_api
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/omniboost/go-datevapi/utils"
+	"github.com/omniboost/go-datev-api/utils"
 )
 
 func (c *Client) NewAccountingDocumentsPutRequest() AccountingDocumentsPutRequest {
