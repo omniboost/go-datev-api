@@ -6,9 +6,8 @@ import (
 	"testing"
 )
 
-func TestAccountingExtfJobStatus(t *testing.T) {
-	req := client.NewAccountingExtfJobStatusRequest()
-	req.PathParams().GUID = "0877422c-b1af-4c43-aede-74cc24edff57"
+func TestAccountingDocumentTypesGet(t *testing.T) {
+	req := client.NewAccountingDocumentTypesGetRequest()
 
 	resp, err := req.Do()
 	if err != nil {
@@ -18,3 +17,4 @@ func TestAccountingExtfJobStatus(t *testing.T) {
 	b, _ := json.MarshalIndent(resp, "", "  ")
 	fmt.Println(string(b))
 }
+

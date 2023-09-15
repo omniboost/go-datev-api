@@ -21,3 +21,11 @@ type Job struct {
 		} `json:"affected_elements"`
 	} `json:"validation_details"`
 }
+
+type DocumentTypes []DocumentType
+
+type DocumentType struct {
+	Name                  string `json:"name"`
+	Category              string `json:"category"`
+	DebitCreditIdentifier string `json:"debitCreditIdentifier,omitempty"`
+}

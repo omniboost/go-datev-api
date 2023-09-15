@@ -56,7 +56,6 @@ func (r AccountingExtfJobStatusRequest) NewPathParams() *AccountingExtfJobStatus
 }
 
 type AccountingExtfJobStatusRequestPathParams struct {
-	Service string
 	GUID    string
 }
 

@@ -3,6 +3,8 @@ package datevapi
 import (
 	"net/http"
 	"net/url"
+	"strconv"
+	"strings"
 
 	"github.com/omniboost/go-datevapi/utils"
 )
@@ -117,7 +119,8 @@ func (r *AccountingExtfFilesUploadRequest) RequestBody() *AccountingExtfFilesUpl
 }
 
 func (r *AccountingExtfFilesUploadRequest) RequestBodyInterface() interface{} {
-	return nil
+	// Convert file to io.Reader
+	return r.FormParams().ExtfFile.Content
 }
 
 func (r *AccountingExtfFilesUploadRequest) SetRequestBody(body AccountingExtfFilesUploadRequestBody) {
@@ -129,6 +132,9 @@ func (r *AccountingExtfFilesUploadRequest) NewResponseBody() *AccountingExtfFile
 }
 
 type AccountingExtfFilesUploadResponseBody struct {
+	Location   string
+	GUID       string
+	RetryAfter int
 }
 
 func (r *AccountingExtfFilesUploadRequest) URL() *url.URL {
@@ -138,12 +144,14 @@ func (r *AccountingExtfFilesUploadRequest) URL() *url.URL {
 
 func (r *AccountingExtfFilesUploadRequest) Do() (AccountingExtfFilesUploadResponseBody, error) {
 	// Create http request
-	req, err := r.client.NewFormRequest(nil, r.Method(), *r.URL(), r.FormParams())
+	req, err := r.client.NewRequest(nil, r)
 	if err != nil {
 		return *r.NewResponseBody(), err
 	}
 
 	req.Header.Add("Filename", "EXTF_Buchungsstapel.csv")
+	// req.Header.Add("Filename", r.FormParams().ExtfFile.Filename)
+	req.Header.Set("Content-Type", "application/octet-stream")
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
@@ -152,6 +160,10 @@ func (r *AccountingExtfFilesUploadRequest) Do() (AccountingExtfFilesUploadRespon
 	}
 
 	responseBody := r.NewResponseBody()
-	_, err = r.client.Do(req, responseBody)
+	resp, err := r.client.Do(req, responseBody)
+	responseBody.Location = resp.Header.Get("Location")
+	responseBody.RetryAfter, _ = strconv.Atoi(resp.Header.Get("Retry-After"))
+	pieces := strings.Split(responseBody.Location, "/")
+	responseBody.GUID = pieces[len(pieces)-1]
 	return *responseBody, err
 }
