@@ -149,7 +149,7 @@ func (r *AccountingExtfFilesUploadRequest) Do() (AccountingExtfFilesUploadRespon
 		return *r.NewResponseBody(), err
 	}
 
-	req.Header.Add("Filename", "EXTF_Buchungsstapel.csv")
+	req.Header.Add("Filename", r.FormParams().ExtfFile.Filename)
 	// req.Header.Add("Filename", r.FormParams().ExtfFile.Filename)
 	req.Header.Set("Content-Type", "application/octet-stream")
 
