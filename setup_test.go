@@ -1,6 +1,7 @@
 package datev_api_test
 
 import (
+	"context"
 	"os"
 	"testing"
 	"time"
@@ -21,6 +22,7 @@ func TestMain(m *testing.M) {
 	refreshToken := os.Getenv("REFRESH_TOKEN")
 	datevClientID := os.Getenv("DATEV_CLIENT_ID")
 	tokenURL := os.Getenv("TOKEN_URL")
+	revokeURL := os.Getenv("REVOKE_URL")
 	debug := os.Getenv("DEBUG")
 
 	oauthConfig := datev.NewOauth2Config()
@@ -38,7 +40,7 @@ func TestMain(m *testing.M) {
 	}
 
 	// get http client with automatic oauth logic
-	httpClient := oauthConfig.Client(oauth2.NoContext, token)
+	httpClient := oauthConfig.Client(context.Background(), token)
 
 	client = datev.NewClient(httpClient)
 	client.SetClientID(clientID)
@@ -46,6 +48,10 @@ func TestMain(m *testing.M) {
 
 	if debug != "" {
 		client.SetDebug(true)
+	}
+
+	if revokeURL != "" {
+		client.SetRevokeURL(revokeURL)
 	}
 
 	if baseURL != "" {

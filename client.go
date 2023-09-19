@@ -29,6 +29,7 @@ const (
 
 var (
 	BaseURL = "https://{{.service}}.api.datev.de/platform/"
+	RevokeURL = "https://api.datev.de/revoke"
 )
 
 // NewClient returns a new Exact Globe Client client
@@ -41,6 +42,7 @@ func NewClient(httpClient *http.Client) *Client {
 
 	client.SetHTTPClient(httpClient)
 	client.SetBaseURL(BaseURL)
+	client.SetRevokeURL(RevokeURL)
 	client.SetDebug(false)
 	client.SetUserAgent(userAgent)
 	client.SetMediaType(mediaType)
@@ -56,6 +58,7 @@ type Client struct {
 
 	debug   bool
 	baseURL string
+	revokeURL string
 
 	// credentials
 	clientID      string
@@ -96,6 +99,14 @@ func (c Client) BaseURL() string {
 
 func (c *Client) SetBaseURL(baseURL string) {
 	c.baseURL = baseURL
+}
+
+func (c Client) RevokeURL() string {
+	return c.revokeURL
+}
+
+func (c *Client) SetRevokeURL(revokeURL string) {
+	c.revokeURL = revokeURL
 }
 
 func (c *Client) SetMediaType(mediaType string) {

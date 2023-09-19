@@ -5,6 +5,7 @@ import (
 	"net/url"
 
 	"github.com/omniboost/go-datev-api/utils"
+	"github.com/pkg/errors"
 )
 
 func (c *Client) NewAccountingExtfJobStatusRequest() AccountingExtfJobStatusRequest {
@@ -127,5 +128,10 @@ func (r *AccountingExtfJobStatusRequest) Do() (AccountingExtfJobStatusResponseBo
 
 	responseBody := r.NewResponseBody()
 	_, err = r.client.Do(req, responseBody)
+
+	if responseBody.Result != "succeeded" {
+		return *responseBody, errors.Errorf("%s: %s, affected_elements: %s", responseBody.ValidationDetails.Title, responseBody.ValidationDetails.Detail, responseBody.ValidationDetails.AffectedElements)
+	}
+
 	return *responseBody, err
 }

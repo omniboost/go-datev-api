@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/omniboost/go-datev-api"
+	datev_api "github.com/omniboost/go-datev-api"
 )
 
 func TestAccountingDocumentsPut(t *testing.T) {
@@ -19,11 +19,11 @@ func TestAccountingDocumentsPut(t *testing.T) {
 	defer f.Close()
 	req := client.NewAccountingDocumentsPutRequest()
 	req.PathParams().GUID = "9482975b-2172-4b43-b7cc-b07b007e2975"
-	req.FormParams().File = datev-api.FormFile{
+	req.FormParams().File = datev_api.FormFile{
 		Filename: "test.pdf",
 		Content:  f,
 	}
-	req.FormParams().Metadata = datev-api.FileMetaData{
+	req.FormParams().Metadata = datev_api.FileMetaData{
 		Category: "outgoing_invoices",
 		Folder:   "mews",
 		Register: "2023",

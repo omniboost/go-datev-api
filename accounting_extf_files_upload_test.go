@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/omniboost/go-datev-api"
+	datev_api "github.com/omniboost/go-datev-api"
 )
 
 func TestAccountingExtfFilesUpload(t *testing.T) {
@@ -19,7 +19,7 @@ func TestAccountingExtfFilesUpload(t *testing.T) {
 
 	defer f.Close()
 	req := client.NewAccountingExtfFilesUploadRequest()
-	req.FormParams().ExtfFile = datev-api.FormFile{
+	req.FormParams().ExtfFile = datev_api.FormFile{
 		Filename: "test.csv",
 		Content:  f,
 	}

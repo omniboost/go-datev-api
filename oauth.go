@@ -20,7 +20,8 @@ func NewOauth2Config() *Oauth2Config {
 			ClientSecret: "",
 			Scopes:       []string{scope},
 			Endpoint: oauth2.Endpoint{
-				TokenURL: "https://api.datev.de/token",
+				TokenURL:  "https://api.datev.de/token",
+				AuthStyle: oauth2.AuthStyleInHeader,
 			},
 		},
 	}
