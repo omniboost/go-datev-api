@@ -28,7 +28,7 @@ const (
 )
 
 var (
-	BaseURL = "https://{{.service}}.api.datev.de/platform/"
+	BaseURL   = "https://{{.service}}.api.datev.de/platform/"
 	RevokeURL = "https://api.datev.de/revoke"
 )
 
@@ -56,8 +56,8 @@ type Client struct {
 	// HTTP client used to communicate with the Client.
 	http *http.Client
 
-	debug   bool
-	baseURL string
+	debug     bool
+	baseURL   string
 	revokeURL string
 
 	// credentials
@@ -464,13 +464,26 @@ func CheckResponse(r *http.Response) error {
 //   "path": "/f/finance/12345/financials/2023-05-10T09:00:00+02:00/2023-05-12T09:00:00+02:00"
 // }
 
+// {
+//   "httpCode": "401",
+//   "httpMessage": "Unauthorized",
+//   "moreInformation": "this offline access token is not authorized to access requested clients",
+//   "status": "401",
+//   "title": "Unauthorized",
+//   "detail": "this offline access token is not authorized to access requested clients"
+// }
+
 type ErrorResponse struct {
 	// HTTP response that caused this error
 	Response *http.Response
 
-	Title     string `json:"title"`
-	RequestID string `json:"request_id"`
-	Status    int    `json:"status"`
+	Title           string `json:"title"`
+	RequestID       string `json:"request_id"`
+	HTTPCode        string `json:"httpCode"`
+	HTTPMessage     string `json:"httpMessage"`
+	MoreInformation string `json:"moreInformation"`
+	Status          string `json:"status"`
+	Detail          string `json:"detail"`
 }
 
 func (r *ErrorResponse) Error() string {
@@ -478,7 +491,19 @@ func (r *ErrorResponse) Error() string {
 		return ""
 	}
 
-	return fmt.Sprintf("%s (%d)", r.Title, r.Status)
+	details := []string{}
+	if r.MoreInformation != "" {
+		details = append(details, r.MoreInformation)
+	}
+	if r.Detail != "" {
+		details = append(details, r.Detail)
+	}
+
+	if len(details) > 0 {
+		return fmt.Sprintf("%s (%s): %s", r.Title, r.Status, strings.Join(details, " "))
+	}
+
+	return fmt.Sprintf("%s (%s)", r.Title, r.Status)
 }
 
 func checkContentType(response *http.Response) error {
