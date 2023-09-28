@@ -16,7 +16,7 @@ func (c *Client) NewTokenRevocationRequest() TokenRevocationRequest {
 
 	r.queryParams = r.NewQueryParams()
 	r.pathParams = r.NewPathParams()
-	// r.formParams = r.NewFormParams()
+	r.formParams = r.NewFormParams()
 	r.requestBody = r.NewRequestBody()
 	return r
 }
@@ -25,7 +25,7 @@ type TokenRevocationRequest struct {
 	client      *Client
 	queryParams *TokenRevocationRequestQueryParams
 	pathParams  *TokenRevocationRequestPathParams
-	// formParams  *TokenRevocationRequestFormparams
+	formParams  *TokenRevocationRequestFormparams
 	method      string
 	headers     http.Header
 	requestBody TokenRevocationRequestBody
@@ -53,37 +53,37 @@ func (r *TokenRevocationRequest) QueryParams() *TokenRevocationRequestQueryParam
 	return r.queryParams
 }
 
-// type TokenRevocationRequestFormparams struct {
-// 	ClientID string
-// 	ClientSecret string
-// 	Token string
-// 	TokenTypeHint string
-// }
+type TokenRevocationRequestFormparams struct {
+	Token string
+	TokenTypeHint string
+}
 
-// func (p TokenRevocationRequestFormparams) Files() map[string]FormFile {
-// 	return map[string]FormFile{}
-// }
+func (p TokenRevocationRequestFormparams) IsMultiPart() bool {
+	return false
+}
 
-// func (p TokenRevocationRequestFormparams) Values() url.Values {
-// 	return url.Values{
-// 		"client_id": []string{p.ClientID},
-// 		"client_secret": []string{p.ClientSecret},
-// 		"token": []string{p.Token},
-// 		"token_type_hint": []string{p.TokenTypeHint},
-// 	}
-// }
+func (p TokenRevocationRequestFormparams) Files() map[string]FormFile {
+	return map[string]FormFile{}
+}
 
-// func (r TokenRevocationRequest) NewFormParams() *TokenRevocationRequestFormparams {
-// 	return &TokenRevocationRequestFormparams{}
-// }
+func (p TokenRevocationRequestFormparams) Values() url.Values {
+	return url.Values{
+		"token": []string{p.Token},
+		"token_type_hint": []string{p.TokenTypeHint},
+	}
+}
 
-// func (r *TokenRevocationRequest) FormParams() *TokenRevocationRequestFormparams {
-// 	return r.formParams
-// }
+func (r TokenRevocationRequest) NewFormParams() *TokenRevocationRequestFormparams {
+	return &TokenRevocationRequestFormparams{}
+}
 
-// func (r *TokenRevocationRequest) FormParamsInterface() Form {
-// 	return r.formParams
-// }
+func (r *TokenRevocationRequest) FormParams() *TokenRevocationRequestFormparams {
+	return r.formParams
+}
+
+func (r *TokenRevocationRequest) FormParamsInterface() Form {
+	return r.formParams
+}
 
 func (r TokenRevocationRequest) NewPathParams() *TokenRevocationRequestPathParams {
 	return &TokenRevocationRequestPathParams{}
@@ -121,11 +121,11 @@ type TokenRevocationRequestBody struct {
 }
 
 func (r *TokenRevocationRequest) RequestBody() *TokenRevocationRequestBody {
-	return &r.requestBody
+	return nil
 }
 
 func (r *TokenRevocationRequest) RequestBodyInterface() interface{} {
-	return &r.requestBody
+	return nil
 }
 
 func (r *TokenRevocationRequest) SetRequestBody(body TokenRevocationRequestBody) {
@@ -151,6 +151,7 @@ func (r *TokenRevocationRequest) Do() (TokenRevocationResponseBody, error) {
 	}
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.SetBasicAuth(r.client.ClientID(), r.client.ClientSecret())
 
 	// Process query parameters
 	err = utils.AddQueryParamsToRequest(r.QueryParams(), req, false)
@@ -159,7 +160,10 @@ func (r *TokenRevocationRequest) Do() (TokenRevocationResponseBody, error) {
 	}
 
 	responseBody := r.NewResponseBody()
+	httpClient := r.client.HTTPClient()
+	r.client.SetHTTPClient(http.DefaultClient)
 	_, err = r.client.Do(req, responseBody)
+	r.client.SetHTTPClient(httpClient)
 
 	return *responseBody, err
 }

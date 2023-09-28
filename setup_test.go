@@ -44,7 +44,9 @@ func TestMain(m *testing.M) {
 
 	client = datev.NewClient(httpClient)
 	client.SetClientID(clientID)
+	client.SetClientSecret(clientSecret)
 	client.SetDatevClientID(datevClientID)
+	client.SetOauth(oauthConfig)
 
 	if debug != "" {
 		client.SetDebug(true)

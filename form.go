@@ -6,6 +6,7 @@ import (
 )
 
 type Form interface {
+	IsMultiPart() bool
 	Values() url.Values
 	Files() map[string]FormFile
 }

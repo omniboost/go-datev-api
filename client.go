@@ -62,7 +62,10 @@ type Client struct {
 
 	// credentials
 	clientID      string
+	clientSecret  string
 	datevClientID string
+
+	oauth *Oauth2Config
 
 	// User agent for client
 	userAgent string
@@ -83,6 +86,10 @@ type RequestCompletionCallback func(*http.Request, *http.Response)
 
 func (c *Client) SetHTTPClient(client *http.Client) {
 	c.http = client
+}
+
+func (c *Client) HTTPClient() *http.Client {
+	return c.http
 }
 
 func (c Client) Debug() bool {
@@ -133,12 +140,28 @@ func (c Client) ClientID() string {
 	return c.clientID
 }
 
+func (c *Client) SetClientSecret(clientSecret string) {
+	c.clientSecret = clientSecret
+}
+
+func (c Client) ClientSecret() string {
+	return c.clientSecret
+}
+
 func (c *Client) SetDatevClientID(datevClientID string) {
 	c.datevClientID = datevClientID
 }
 
 func (c Client) DatevClientID() string {
 	return c.datevClientID
+}
+
+func (c *Client) SetOauth(oauth *Oauth2Config) {
+	c.oauth = oauth
+}
+
+func (c Client) Oauth() *Oauth2Config {
+	return c.oauth
 }
 
 func (c *Client) SetUserAgent(userAgent string) {
@@ -231,46 +254,50 @@ func (c *Client) NewRequest(ctx context.Context, req Request) (*http.Request, er
 			}
 		}
 	} else if i, ok := req.(interface{ FormParamsInterface() Form }); ok {
-		// @TODO implement this as RequestBodyInterface()
-		// Request has a form as body
-		var err error
-		w := multipart.NewWriter(buf)
+		if i.FormParamsInterface().IsMultiPart() {
+			// @TODO implement this as RequestBodyInterface()
+			// Request has a form as body
+			var err error
+			w := multipart.NewWriter(buf)
 
-		for k, f := range i.FormParamsInterface().Files() {
-			var part io.Writer
-			if x, ok := f.Content.(io.Closer); ok {
-				defer x.Close()
+			for k, f := range i.FormParamsInterface().Files() {
+				var part io.Writer
+				if x, ok := f.Content.(io.Closer); ok {
+					defer x.Close()
+				}
+
+				if part, err = w.CreateFormFile(k, f.Filename); err != nil {
+					return nil, err
+				}
+
+				if _, err = io.Copy(part, f.Content); err != nil {
+					return nil, err
+				}
 			}
 
-			if part, err = w.CreateFormFile(k, f.Filename); err != nil {
-				return nil, err
+			for k := range i.FormParamsInterface().Values() {
+				var part io.Writer
+
+				// Add other fields
+				if part, err = w.CreateFormField(k); err != nil {
+					return nil, err
+				}
+
+				fv := strings.NewReader(i.FormParamsInterface().Values().Get(k))
+				if _, err = io.Copy(part, fv); err != nil {
+					return nil, err
+				}
 			}
 
-			if _, err = io.Copy(part, f.Content); err != nil {
-				return nil, err
-			}
+			// Don't forget to close the multipart writer.
+			// If you don't close it, your request will be missing the terminating boundary.
+			w.Close()
+
+			// Don't forget to set the content type, this will contain the boundary.
+			contentType = w.FormDataContentType()
+		} else {
+			buf.WriteString(i.FormParamsInterface().Values().Encode())
 		}
-
-		for k := range i.FormParamsInterface().Values() {
-			var part io.Writer
-
-			// Add other fields
-			if part, err = w.CreateFormField(k); err != nil {
-				return nil, err
-			}
-
-			fv := strings.NewReader(i.FormParamsInterface().Values().Get(k))
-			if _, err = io.Copy(part, fv); err != nil {
-				return nil, err
-			}
-		}
-
-		// Don't forget to close the multipart writer.
-		// If you don't close it, your request will be missing the terminating boundary.
-		w.Close()
-
-		// Don't forget to set the content type, this will contain the boundary.
-		contentType = w.FormDataContentType()
 	}
 
 	// create new http request

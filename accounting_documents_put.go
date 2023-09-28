@@ -44,6 +44,10 @@ type AccountingDocumentsPutRequestFormParams struct {
 	File     FormFile
 }
 
+func (p AccountingDocumentsPutRequestFormParams) IsMultiPart() bool {
+	return true
+}
+
 func (p AccountingDocumentsPutRequestFormParams) Files() map[string]FormFile {
 	return map[string]FormFile{
 		"file": p.File,
