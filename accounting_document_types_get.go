@@ -87,11 +87,11 @@ type AccountingDocumentTypesGetRequestBody struct {
 }
 
 func (r *AccountingDocumentTypesGetRequest) RequestBody() *AccountingDocumentTypesGetRequestBody {
-	return nil
+	return &r.requestBody
 }
 
 func (r *AccountingDocumentTypesGetRequest) RequestBodyInterface() interface{} {
-	return nil
+	return r.requestBody
 }
 
 func (r *AccountingDocumentTypesGetRequest) SetRequestBody(body AccountingDocumentTypesGetRequestBody) {
