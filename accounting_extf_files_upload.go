@@ -115,7 +115,7 @@ type AccountingExtfFilesUploadRequestBody struct {
 }
 
 func (r *AccountingExtfFilesUploadRequest) RequestBody() *AccountingExtfFilesUploadRequestBody {
-	return nil
+	return &r.requestBody
 }
 
 func (r *AccountingExtfFilesUploadRequest) RequestBodyInterface() interface{} {

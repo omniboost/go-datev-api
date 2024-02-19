@@ -54,7 +54,7 @@ func (r *TokenRevocationRequest) QueryParams() *TokenRevocationRequestQueryParam
 }
 
 type TokenRevocationRequestFormparams struct {
-	Token string
+	Token         string
 	TokenTypeHint string
 }
 
@@ -68,7 +68,7 @@ func (p TokenRevocationRequestFormparams) Files() map[string]FormFile {
 
 func (p TokenRevocationRequestFormparams) Values() url.Values {
 	return url.Values{
-		"token": []string{p.Token},
+		"token":           []string{p.Token},
 		"token_type_hint": []string{p.TokenTypeHint},
 	}
 }
@@ -121,11 +121,11 @@ type TokenRevocationRequestBody struct {
 }
 
 func (r *TokenRevocationRequest) RequestBody() *TokenRevocationRequestBody {
-	return nil
+	return &r.requestBody
 }
 
 func (r *TokenRevocationRequest) RequestBodyInterface() interface{} {
-	return nil
+	return r.requestBody
 }
 
 func (r *TokenRevocationRequest) SetRequestBody(body TokenRevocationRequestBody) {

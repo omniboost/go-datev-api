@@ -87,11 +87,11 @@ type ClientsGetRequestBody struct {
 }
 
 func (r *ClientsGetRequest) RequestBody() *ClientsGetRequestBody {
-	return nil
+	return &r.requestBody
 }
 
 func (r *ClientsGetRequest) RequestBodyInterface() interface{} {
-	return nil
+	return r.requestBody
 }
 
 func (r *ClientsGetRequest) SetRequestBody(body ClientsGetRequestBody) {
@@ -126,4 +126,3 @@ func (r *ClientsGetRequest) Do() (ClientsGetResponseBody, error) {
 	_, err = r.client.Do(req, responseBody)
 	return *responseBody, err
 }
-

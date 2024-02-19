@@ -57,7 +57,7 @@ func (r AccountingExtfJobStatusRequest) NewPathParams() *AccountingExtfJobStatus
 }
 
 type AccountingExtfJobStatusRequestPathParams struct {
-	GUID    string
+	GUID string
 }
 
 func (p *AccountingExtfJobStatusRequestPathParams) Params() map[string]string {
@@ -91,11 +91,11 @@ type AccountingExtfJobStatusRequestBody struct {
 }
 
 func (r *AccountingExtfJobStatusRequest) RequestBody() *AccountingExtfJobStatusRequestBody {
-	return nil
+	return &r.requestBody
 }
 
 func (r *AccountingExtfJobStatusRequest) RequestBodyInterface() interface{} {
-	return nil
+	return r.requestBody
 }
 
 func (r *AccountingExtfJobStatusRequest) SetRequestBody(body AccountingExtfJobStatusRequestBody) {
