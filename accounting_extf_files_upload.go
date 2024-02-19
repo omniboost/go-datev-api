@@ -161,6 +161,10 @@ func (r *AccountingExtfFilesUploadRequest) Do() (AccountingExtfFilesUploadRespon
 
 	responseBody := r.NewResponseBody()
 	resp, err := r.client.Do(req, responseBody)
+	if err != nil {
+		return *responseBody, err
+	}
+
 	responseBody.Location = resp.Header.Get("Location")
 	responseBody.RetryAfter, _ = strconv.Atoi(resp.Header.Get("Retry-After"))
 	pieces := strings.Split(responseBody.Location, "/")
