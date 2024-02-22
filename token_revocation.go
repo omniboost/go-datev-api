@@ -121,11 +121,11 @@ type TokenRevocationRequestBody struct {
 }
 
 func (r *TokenRevocationRequest) RequestBody() *TokenRevocationRequestBody {
-	return &r.requestBody
+	return nil
 }
 
 func (r *TokenRevocationRequest) RequestBodyInterface() interface{} {
-	return r.requestBody
+	return nil
 }
 
 func (r *TokenRevocationRequest) SetRequestBody(body TokenRevocationRequestBody) {
