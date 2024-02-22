@@ -128,6 +128,9 @@ func (r *AccountingExtfJobStatusRequest) Do() (AccountingExtfJobStatusResponseBo
 
 	responseBody := r.NewResponseBody()
 	_, err = r.client.Do(req, responseBody)
+	if err != nil {
+		return *responseBody, err
+	}
 
 	if responseBody.Result != "succeeded" {
 		return *responseBody, errors.Errorf("%s: %s, affected_elements: %s", responseBody.ValidationDetails.Title, responseBody.ValidationDetails.Detail, responseBody.ValidationDetails.AffectedElements)

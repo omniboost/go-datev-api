@@ -20,7 +20,7 @@ func TestAccountingExtfFilesUpload(t *testing.T) {
 	defer f.Close()
 	req := client.NewAccountingExtfFilesUploadRequest()
 	req.FormParams().ExtfFile = datev_api.FormFile{
-		Filename: "test.csv",
+		Filename: "EXTF_schokoladenhotel_2023-04-09.csv",
 		Content:  f,
 	}
 	resp, err := req.Do()

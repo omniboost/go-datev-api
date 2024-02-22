@@ -8,7 +8,7 @@ import (
 
 func TestAccountingExtfJobStatus(t *testing.T) {
 	req := client.NewAccountingExtfJobStatusRequest()
-	req.PathParams().GUID = "0877422c-b1af-4c43-aede-74cc24edff57"
+	req.PathParams().GUID = "867d5bed-e66a-454f-84d1-745c184ade28"
 
 	resp, err := req.Do()
 	if err != nil {

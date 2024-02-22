@@ -20,6 +20,7 @@ func TestMain(m *testing.M) {
 	clientID := os.Getenv("CLIENT_ID")
 	clientSecret := os.Getenv("CLIENT_SECRET")
 	refreshToken := os.Getenv("REFRESH_TOKEN")
+	accessToken := os.Getenv("ACCESS_TOKEN")
 	datevClientID := os.Getenv("DATEV_CLIENT_ID")
 	tokenURL := os.Getenv("TOKEN_URL")
 	revokeURL := os.Getenv("REVOKE_URL")
@@ -36,6 +37,7 @@ func TestMain(m *testing.M) {
 
 	token := &oauth2.Token{
 		RefreshToken: refreshToken,
+		AccessToken: accessToken,
 		Expiry:       time.Now().AddDate(0, 0, 1),
 	}
 
