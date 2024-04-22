@@ -91,11 +91,11 @@ type AccountingExtfJobStatusRequestBody struct {
 }
 
 func (r *AccountingExtfJobStatusRequest) RequestBody() *AccountingExtfJobStatusRequestBody {
-	return &r.requestBody
+	return nil
 }
 
 func (r *AccountingExtfJobStatusRequest) RequestBodyInterface() interface{} {
-	return r.requestBody
+	return nil
 }
 
 func (r *AccountingExtfJobStatusRequest) SetRequestBody(body AccountingExtfJobStatusRequestBody) {

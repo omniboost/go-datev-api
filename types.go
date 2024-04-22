@@ -4,11 +4,19 @@ import (
 	"time"
 )
 
+type Jobs []Job
+
 type Job struct {
 	ID                           string    `json:"id"`
 	Filename                     string    `json:"filename"`
+	FiscalYearBegin              Date      `json:"fiscal_year_begin"`
 	ClientApplicationDisplayName string    `json:"client_application_display_name"`
 	ClientApplicationVendor      string    `json:"client_application_vendor"`
+	DataCategoryID               int       `json:"data_category_id"`
+	DateFrom                     Date      `json:"date_from"`
+	DateTo                       Date      `json:"date_to"`
+	Label                        string    `json:"label"`
+	NumberOfAccountingRecords    int       `json:"number_of_accounting_records"`
 	Result                       string    `json:"result"`
 	Timestamp                    time.Time `json:"timestamp"`
 	ValidationDetails            struct {

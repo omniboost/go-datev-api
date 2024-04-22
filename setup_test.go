@@ -37,7 +37,7 @@ func TestMain(m *testing.M) {
 
 	token := &oauth2.Token{
 		RefreshToken: refreshToken,
-		AccessToken: accessToken,
+		AccessToken:  accessToken,
 		Expiry:       time.Now().AddDate(0, 0, 1),
 	}
 
