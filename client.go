@@ -504,13 +504,17 @@ type ErrorResponse struct {
 	// HTTP response that caused this error
 	Response *http.Response
 
-	Title           string `json:"title"`
-	RequestID       string `json:"request_id"`
-	HTTPCode        string `json:"httpCode"`
-	HTTPMessage     string `json:"httpMessage"`
-	MoreInformation string `json:"moreInformation"`
-	Status          int    `json:"status"`
-	Detail          string `json:"detail"`
+	Title            string `json:"title"`
+	RequestID        string `json:"request_id"`
+	HTTPCode         string `json:"httpCode"`
+	HTTPMessage      string `json:"httpMessage"`
+	MoreInformation  string `json:"moreInformation"`
+	AffectedElements []struct {
+		Name   string `json:"name"`
+		Reason string `json:"reason"`
+	} `json:"affected_elements"`
+	Status int    `json:"status"`
+	Detail string `json:"detail"`
 }
 
 func (r *ErrorResponse) Error() string {
@@ -525,6 +529,10 @@ func (r *ErrorResponse) Error() string {
 	if r.Detail != "" {
 		details = append(details, r.Detail)
 	}
+
+	for _, e := range r.AffectedElements {
+        details = append(details, fmt.Sprintf("%s: %s", e.Name, e.Reason))
+    }
 
 	if len(details) > 0 {
 		return fmt.Sprintf("%s (%d): %s", r.Title, r.Status, strings.Join(details, " "))
