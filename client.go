@@ -17,6 +17,7 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/omniboost/go-httperr"
 	"github.com/pkg/errors"
 )
 
@@ -391,6 +392,14 @@ func (c *Client) Do(req *http.Request, body interface{}) (*http.Response, error)
 
 	if errResp.Error() != "" {
 		return httpResp, errResp
+	}
+
+	// no matches on th struct, but we got an error status code, try to return
+	// the response body as error message if its just plain text
+	if httpResp.StatusCode != 0 && (httpResp.StatusCode < 200 || httpResp.StatusCode > 299) {
+		// not text, but still an error status code, return the status as error
+		// message
+		return httpResp, &httperr.Error{StatusCode: httpResp.StatusCode, Err: errors.New(httpResp.Status)}
 	}
 
 	return httpResp, nil
