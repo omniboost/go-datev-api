@@ -75,3 +75,29 @@ func (f *IntString) UnmarshalJSON(text []byte) (err error) {
 	*f = IntString(str)
 	return nil
 }
+
+type StringInt int
+
+func (f *StringInt) UnmarshalJSON(text []byte) (err error) {
+	var integer int
+	err = json.Unmarshal(text, &integer)
+	if err == nil {
+		*f = StringInt(integer)
+		return err
+	}
+
+	// error, so try string
+	var str string
+	err = json.Unmarshal(text, &str)
+	if err != nil {
+		return err
+	}
+
+	integer, err = strconv.Atoi(str)
+	if err != nil {
+		return err
+	}
+
+	*f = StringInt(integer)
+	return nil
+}

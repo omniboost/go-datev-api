@@ -522,7 +522,7 @@ type ErrorResponse struct {
 		Name   string `json:"name"`
 		Reason string `json:"reason"`
 	} `json:"affected_elements"`
-	Status IntString `json:"status"`
+	Status StringInt `json:"status"`
 	Detail string    `json:"detail"`
 }
 
