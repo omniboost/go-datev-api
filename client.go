@@ -522,8 +522,8 @@ type ErrorResponse struct {
 		Name   string `json:"name"`
 		Reason string `json:"reason"`
 	} `json:"affected_elements"`
-	Status string `json:"status"`
-	Detail string `json:"detail"`
+	Status IntString `json:"status"`
+	Detail string    `json:"detail"`
 }
 
 func (r *ErrorResponse) Error() string {
@@ -544,10 +544,10 @@ func (r *ErrorResponse) Error() string {
 	}
 
 	if len(details) > 0 {
-		return fmt.Sprintf("%s (%s): %s", r.Title, r.Status, strings.Join(details, " "))
+		return fmt.Sprintf("%s (%d): %s", r.Title, r.Status, strings.Join(details, " "))
 	}
 
-	return fmt.Sprintf("%s (%s)", r.Title, r.Status)
+	return fmt.Sprintf("%s (%d)", r.Title, r.Status)
 }
 
 func checkContentType(response *http.Response) error {

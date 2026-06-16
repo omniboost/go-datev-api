@@ -3,6 +3,7 @@ package datev_api
 import (
 	"encoding/json"
 	"log"
+	"strconv"
 	"time"
 )
 
@@ -51,4 +52,26 @@ func (d *Date) UnmarshalJSON(text []byte) (err error) {
 	d.Time, err = time.Parse("2006-01-02T15:04:05", value)
 	log.Println(d.Time)
 	return err
+}
+
+type IntString string
+
+func (f *IntString) UnmarshalJSON(text []byte) (err error) {
+	var str string
+	err = json.Unmarshal(text, &str)
+	if err == nil {
+		*f = IntString(str)
+		return err
+	}
+
+	// error, so try int
+	var integer int
+	err = json.Unmarshal(text, &integer)
+	if err != nil {
+		return err
+	}
+
+	str = strconv.Itoa(integer)
+	*f = IntString(str)
+	return nil
 }
